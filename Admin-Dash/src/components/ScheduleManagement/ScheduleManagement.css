@@ -1,21 +1,45 @@
 .schedule-management {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: Arial, sans-serif;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 15px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .page-header h1 {
-  font-size: 28px;
-  color: #333;
   margin: 0;
+  color: #333;
+  font-size: 28px;
+}
+
+.status-indicator {
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.status-success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.status-waiting {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  padding: 8px 15px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .export-buttons {
@@ -23,48 +47,77 @@
   gap: 10px;
 }
 
-button {
-  cursor: pointer;
-  padding: 8px 16px;
-  border-radius: 4px;
+.btn-primary, .btn-success, .btn-danger, .btn-small {
+  padding: 10px 15px;
   border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  gap: 5px;
+  transition: all 0.3s ease;
 }
 
 .btn-primary {
-  background-color: #4285f4;
+  background-color: #007bff;
   color: white;
 }
 
 .btn-primary:hover {
-  background-color: #3367d6;
+  background-color: #0069d9;
+}
+
+.btn-primary:disabled {
+  background-color: #b3d7ff;
+  cursor: not-allowed;
+}
+
+.btn-generated {
+  background-color: #28a745;
+}
+
+.btn-generated:hover {
+  background-color: #218838;
 }
 
 .btn-success {
-  background-color: #0f9d58;
+  background-color: #28a745;
   color: white;
 }
 
 .btn-success:hover {
-  background-color: #0b8043;
+  background-color: #218838;
+}
+
+.btn-success:disabled {
+  background-color: #a3d7af;
+  cursor: not-allowed;
 }
 
 .btn-danger {
-  background-color: #db4437;
+  background-color: #dc3545;
   color: white;
 }
 
 .btn-danger:hover {
-  background-color: #c53929;
+  background-color: #c82333;
+}
+
+.btn-danger:disabled {
+  background-color: #f3b7bd;
+  cursor: not-allowed;
 }
 
 .btn-small {
-  padding: 6px 12px;
-  font-size: 14px;
+  background-color: #f8f9fa;
+  color: #212529;
+  padding: 5px 10px;
+  font-size: 0.9em;
+}
+
+.btn-small:hover {
+  background-color: #e2e6ea;
 }
 
 .loading-container {
@@ -76,13 +129,13 @@ button {
 }
 
 .spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  width: 36px;
-  height: 36px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #007bff;
   border-radius: 50%;
-  border-left-color: #4285f4;
+  width: 50px;
+  height: 50px;
   animation: spin 1s linear infinite;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 
 @keyframes spin {
@@ -90,15 +143,13 @@ button {
   100% { transform: rotate(360deg); }
 }
 
-/* Room cards */
 .room-cards-container {
   margin-bottom: 30px;
 }
 
 .room-cards-container h2 {
-  font-size: 20px;
   margin-bottom: 15px;
-  color: #333;
+  color: #343a40;
 }
 
 .room-cards {
@@ -108,31 +159,32 @@ button {
 }
 
 .room-card {
-  background-color: #fff;
+  background-color: #f8f9fa;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  cursor: pointer;
+  padding: 15px;
   transition: all 0.3s ease;
-  border: 2px solid transparent;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .room-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .room-card.selected {
-  border-color: #4285f4;
-  background-color: #f8fbff;
-  transform: translateY(-3px);
+  border: 2px solid #007bff;
+  background-color: #f0f7ff;
+}
+
+.room-card.has-sessions {
+  border-left: 4px solid #28a745;
 }
 
 .room-card h3 {
   margin-top: 0;
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 18px;
+  color: #343a40;
 }
 
 .room-card-details {
@@ -141,112 +193,106 @@ button {
 
 .room-card-details p {
   margin: 5px 0;
-  color: #555;
+  color: #6c757d;
 }
 
 .room-card-footer {
-  display: flex;
-  justify-content: flex-end;
+  text-align: right;
 }
 
-/* Selected room schedule */
 .selected-room-schedule {
   background-color: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
   margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .room-schedule-header {
   margin-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 10px;
 }
 
 .room-schedule-header h2 {
-  margin-top: 0;
-  color: #333;
-  font-size: 22px;
+  margin: 0 0 5px 0;
+  color: #343a40;
 }
 
 .room-schedule-header p {
-  color: #555;
-  margin: 5px 0;
+  margin: 0;
+  color: #6c757d;
 }
 
-/* Day tabs */
 .day-tabs {
   display: flex;
   gap: 10px;
   margin-bottom: 20px;
   overflow-x: auto;
-  padding-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 .day-tab {
-  padding: 8px 16px;
-  background-color: #f5f5f5;
+  background-color: #f8f9fa;
   border: none;
   border-radius: 4px;
+  padding: 10px 15px;
   cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
   position: relative;
-  transition: all 0.2s ease;
 }
 
 .day-tab:hover {
-  background-color: #e0e0e0;
+  background-color: #e2e6ea;
 }
 
 .day-tab.has-classes {
-  background-color: #e8f0fe;
-  color: #4285f4;
+  background-color: #007bff;
+  color: white;
+}
+
+.day-tab.has-classes:hover {
+  background-color: #0069d9;
 }
 
 .class-count {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background-color: #4285f4;
+  background-color: #28a745;
   color: white;
-  border-radius: 50%;
+  font-size: 0.8em;
   width: 20px;
   height: 20px;
-  display: flex;
+  border-radius: 50%;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 12px;
+  position: absolute;
+  top: -5px;
+  right: -5px;
 }
 
-/* Day schedules */
 .day-schedules {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
+  margin-bottom: 20px;
 }
 
 .day-schedule {
+  margin-bottom: 30px;
   scroll-margin-top: 20px;
 }
 
 .day-schedule h3 {
   margin-top: 0;
-  margin-bottom: 15px;
-  color: #333;
-  font-size: 20px;
-  border-bottom: 1px solid #e0e0e0;
-  padding-bottom: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #dee2e6;
+  color: #343a40;
 }
 
 .no-classes {
-  background-color: #f5f5f5;
-  padding: 20px;
-  border-radius: 6px;
   text-align: center;
-  color: #777;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  color: #6c757d;
 }
 
-/* Time slots */
 .time-slots {
   display: flex;
   flex-direction: column;
@@ -254,28 +300,30 @@ button {
 }
 
 .time-slot-card {
-  background-color: #fff;
+  background-color: #f8f9fa;
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
   overflow: hidden;
 }
 
 .time-slot-header {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #4285f4;
-  color: white;
-  padding: 10px 15px;
 }
 
 .time-slot-header .time {
-  font-weight: 500;
+  font-weight: bold;
 }
 
 .time-slot-header .course-code {
-  font-weight: 600;
-  font-size: 16px;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: bold;
 }
 
 .time-slot-details {
@@ -283,73 +331,118 @@ button {
 }
 
 .time-slot-details p {
-  margin: 5px 0;
-  color: #555;
+  margin: 8px 0;
+  color: #495057;
 }
 
-/* Room timetable view */
+/* Room timetable view styles */
 .room-timetable-view {
-  margin-top: 30px;
+  margin-bottom: 30px;
   overflow-x: auto;
 }
 
 .room-timetable-view h3 {
-  margin-top: 0;
   margin-bottom: 15px;
-  color: #333;
-  font-size: 20px;
+  color: #343a40;
 }
 
 .timetable {
   width: 100%;
   border-collapse: collapse;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   background-color: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 .timetable th, .timetable td {
-  border: 1px solid #e0e0e0;
+  border: 1px solid #dee2e6;
   padding: 10px;
   text-align: center;
 }
 
 .timetable th {
-  background-color: #f5f5f5;
-  font-weight: 600;
-  color: #333;
+  background-color: #f8f9fa;
+  font-weight: bold;
+  color: #495057;
 }
 
 .time-cell {
-  font-weight: 500;
-  color: #666;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
+  font-weight: bold;
+  color: #495057;
   width: 100px;
 }
 
-.empty-cell {
-  background-color: #f9f9f9;
-  color: #aaa;
+.scheduled-cell {
+  background-color: #e8f4fe;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.scheduled-cell {
-  position: relative;
-  background-color: #e8f0fe;
+.scheduled-cell:hover {
+  background-color: #cce5ff;
+}
+
+.empty-cell {
+  background-color: white;
 }
 
 .cell-content {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2px;
 }
 
 .cell-course {
-  font-weight: 500;
-  color: #4285f4;
+  font-weight: bold;
+  color: #007bff;
 }
 
 .cell-session {
-  font-size: 12px;
-  color: #666;
+  font-size: 0.85em;
+  color: #6c757d;
+}
+
+/* Schedule summary styles */
+.schedule-summary {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.schedule-summary h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #343a40;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.summary-stat {
+  background-color: white;
+  border-radius: 6px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.summary-stat h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: #6c757d;
+}
+
+.summary-stat p {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #343a40;
 }
 
 /* Responsive adjustments */
@@ -357,15 +450,21 @@ button {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 15px;
   }
   
   .export-buttons {
-    width: 100%;
     flex-wrap: wrap;
   }
   
   .room-cards {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: 1fr;
+  }
+  
+  .day-tabs {
+    flex-wrap: wrap;
+  }
+  
+  .summary-stats {
+    grid-template-columns: 1fr;
   }
 }

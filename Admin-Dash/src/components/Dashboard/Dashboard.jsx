@@ -9,18 +9,18 @@ import {
 function Dashboard() {
   // Mock data for charts
   const courseEnrollmentData = [
-    { name: 'Computer Science', students: 150 },
-    { name: 'Engineering', students: 200 },
-    { name: 'Business', students: 130 },
-    { name: 'Arts', students: 90 },
-    { name: 'Medicine', students: 110 },
+    { name: 'Computer Science', students: 21 },
+    { name: 'Engineering', students: 16 },
+    { name: 'Business', students: 10 },
+    { name: 'Arts', students: 9 },
+    { name: 'Medicine', students: 12 },
   ];
 
   const categoryData = [
-    { name: 'Freshmen', value: 250 },
-    { name: 'Sophomores', value: 200 },
-    { name: 'Juniors', value: 180 },
-    { name: 'Seniors', value: 150 },
+    { name: '1st years', value: 19 },
+    { name: '2nd years', value: 19 },
+    { name: '3rd years', value: 19 },
+    { name: '4th years', value: 19 },
   ];
 
   const timeData = [
@@ -45,7 +45,7 @@ function Dashboard() {
           </div>
           <div className="stat-content">
             <h3>Total Students</h3>
-            <p className="stat-number">780</p>
+            <p className="stat-number">46</p>
           </div>
         </div>
 
@@ -55,7 +55,7 @@ function Dashboard() {
           </div>
           <div className="stat-content">
             <h3>Total Courses</h3>
-            <p className="stat-number">42</p>
+            <p className="stat-number">6</p>
           </div>
         </div>
 
@@ -65,7 +65,7 @@ function Dashboard() {
           </div>
           <div className="stat-content">
             <h3>Teaching Assistants</h3>
-            <p className="stat-number">215</p>
+            <p className="stat-number">4</p>
           </div>
         </div>
 

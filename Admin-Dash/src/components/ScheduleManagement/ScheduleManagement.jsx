@@ -1,36 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { getEmptySchedule, getGeneratedSchedule } from './mockDataService';
 import './ScheduleManagement.css';
 
 function ScheduleManagement() {
-  // State for schedule data from backend
+  // State for schedule data
   const [roomSchedules, setRoomSchedules] = useState({});
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [scheduleGenerated, setScheduleGenerated] = useState(false);
   
   // Days for the schedule
   const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   
-  // Fetch schedule data from backend
+  // Load initial empty schedule
   useEffect(() => {
-    const fetchScheduleData = async () => {
-      try {
-        // Replace with your actual API endpoint
-        const response = await fetch('/api/schedules/rooms');
-        const data = await response.json();
-        setRoomSchedules(data);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching schedule data:', error);
-        setLoading(false);
-      }
-    };
-    
-    fetchScheduleData();
-    
-    // For development/testing, comment out the above and use this mock data
-    // const mockData = getMockScheduleData();
-    // setRoomSchedules(mockData);
-    // setLoading(false);
+    // Simulating API fetch delay
+    setTimeout(() => {
+      const emptySchedule = getEmptySchedule();
+      setRoomSchedules(emptySchedule);
+      setLoading(false);
+    }, 1000);
   }, []);
   
   // Function to handle room selection
@@ -38,21 +27,18 @@ function ScheduleManagement() {
     setSelectedRoom(roomId === selectedRoom ? null : roomId);
   };
   
-  // Generate manual schedule
-  const generateSchedule = async () => {
-    try {
-      setLoading(true);
-      // Call backend to generate schedule
-      const response = await fetch('/api/schedules/generate', { method: 'POST' });
-      const data = await response.json();
-      setRoomSchedules(data);
+  // Generate schedule with mock data
+  const generateSchedule = () => {
+    setLoading(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      const generatedSchedule = getGeneratedSchedule();
+      setRoomSchedules(generatedSchedule);
+      setScheduleGenerated(true);
       setLoading(false);
       alert('Schedule generated successfully!');
-    } catch (error) {
-      console.error('Error generating schedule:', error);
-      setLoading(false);
-      alert('Failed to generate schedule. Please try again.');
-    }
+    }, 2000);
   };
   
   // Export schedule (mock function)
@@ -73,6 +59,14 @@ function ScheduleManagement() {
     return scheduledByDay;
   };
   
+  // Calculate room utilization
+  const calculateRoomUtilization = (roomData) => {
+    if (!roomData || !roomData.schedules) return '0%';
+    const totalTimeSlots = 40; // 8 slots per day * 5 days
+    const scheduledSessions = roomData.schedules.length;
+    return `${Math.round((scheduledSessions / totalTimeSlots) * 100)}%`;
+  };
+  
   // Render loading state
   if (loading) {
     return (
@@ -89,15 +83,27 @@ function ScheduleManagement() {
     <div className="schedule-management">
       <div className="page-header">
         <h1>Schedule Management</h1>
+        <div className="status-indicator">
+          {scheduleGenerated ? (
+            <span className="status-success">Schedule Generated</span>
+          ) : (
+            <span className="status-waiting">No Schedule Generated</span>
+          )}
+        </div>
         <div className="export-buttons">
-          <button className="btn-success" onClick={() => exportSchedule('Excel')}>
+          <button className="btn-success" onClick={() => exportSchedule('Excel')} disabled={!scheduleGenerated}>
             <i className="fas fa-file-excel"></i> Export to Excel
           </button>
-          <button className="btn-danger" onClick={() => exportSchedule('PDF')}>
+          <button className="btn-danger" onClick={() => exportSchedule('PDF')} disabled={!scheduleGenerated}>
             <i className="fas fa-file-pdf"></i> Export to PDF
           </button>
-          <button className="btn-primary" onClick={generateSchedule}>
-            <i className="fas fa-calendar-alt"></i> Generate Schedule
+          <button 
+            className={`btn-primary ${scheduleGenerated ? 'btn-generated' : ''}`} 
+            onClick={generateSchedule}
+            disabled={loading}
+          >
+            <i className="fas fa-calendar-alt"></i> 
+            {scheduleGenerated ? 'Regenerate Schedule' : 'Generate Schedule'}
           </button>
         </div>
       </div>
@@ -110,17 +116,19 @@ function ScheduleManagement() {
             const roomData = roomSchedules[roomId];
             const totalSessions = roomData.schedules ? roomData.schedules.length : 0;
             const isSelected = selectedRoom === roomId;
+            const utilization = calculateRoomUtilization(roomData);
             
             return (
               <div 
                 key={roomId} 
-                className={`room-card ${isSelected ? 'selected' : ''}`}
+                className={`room-card ${isSelected ? 'selected' : ''} ${totalSessions > 0 ? 'has-sessions' : ''}`}
                 onClick={() => handleRoomSelect(roomId)}
               >
                 <h3>Room {roomData.room_id}</h3>
                 <div className="room-card-details">
                   <p><strong>Capacity:</strong> {roomData.capacity}</p>
                   <p><strong>Sessions:</strong> {totalSessions}</p>
+                  <p><strong>Utilization:</strong> {utilization}</p>
                 </div>
                 <div className="room-card-footer">
                   <button className="btn-small">
@@ -241,6 +249,34 @@ function ScheduleManagement() {
           </table>
         </div>
       )}
+      
+      {/* Schedule summary if schedule is generated */}
+      {scheduleGenerated && (
+        <div className="schedule-summary">
+          <h2>Schedule Summary</h2>
+          <div className="summary-stats">
+            <div className="summary-stat">
+              <h4>Total Rooms</h4>
+              <p>{Object.keys(roomSchedules).length}</p>
+            </div>
+            <div className="summary-stat">
+              <h4>Total Sessions</h4>
+              <p>{Object.values(roomSchedules).reduce((sum, room) => sum + room.schedules.length, 0)}</p>
+            </div>
+            <div className="summary-stat">
+              <h4>Average Utilization</h4>
+              <p>
+                {Math.round(
+                  Object.values(roomSchedules).reduce(
+                    (sum, room) => sum + (room.schedules.length / 40) * 100, 
+                    0
+                  ) / Object.keys(roomSchedules).length
+                )}%
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -257,90 +293,6 @@ function generateTimeSlots() {
     { value: '15:15', format: '3:15 PM' },
     { value: '16:15', format: '4:15 PM' }
   ];
-}
-
-// Mock data for development/testing
-function getMockScheduleData() {
-  return {
-    "A101": {
-      "room_id": "A101",
-      "capacity": 30,
-      "schedules": [
-        {
-          "day": "Monday",
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "course_code": "CS101",
-          "course_name": "Introduction to Programming",
-          "section_id": "CS101-A",
-          "professor": "Dr. Smith",
-          "session_number": 1,
-          "total_sessions": 2,
-          "enrolled_students": 25
-        },
-        {
-          "day": "Monday",
-          "start_time": "10:00",
-          "end_time": "11:00",
-          "course_code": "CS101",
-          "course_name": "Introduction to Programming",
-          "section_id": "CS101-A",
-          "professor": "Dr. Smith",
-          "session_number": 2,
-          "total_sessions": 2,
-          "enrolled_students": 25
-        }
-      ]
-    },
-    "A102": {
-      "room_id": "A102",
-      "capacity": 30,
-      "schedules": [
-        {
-          "day": "Monday",
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "course_code": "MATH101",
-          "course_name": "Calculus I",
-          "section_id": "MATH101-A",
-          "professor": "Dr. Johnson",
-          "session_number": 1,
-          "total_sessions": 2,
-          "enrolled_students": 28
-        },
-        {
-          "day": "Monday",
-          "start_time": "10:00",
-          "end_time": "11:00",
-          "course_code": "MATH101",
-          "course_name": "Calculus I",
-          "section_id": "MATH101-A",
-          "professor": "Dr. Johnson",
-          "session_number": 2,
-          "total_sessions": 2,
-          "enrolled_students": 28
-        }
-      ]
-    },
-    "B201": {
-      "room_id": "B201",
-      "capacity": 40,
-      "schedules": [
-        {
-          "day": "Monday",
-          "start_time": "09:00",
-          "end_time": "10:00",
-          "course_code": "ENG101",
-          "course_name": "English Composition",
-          "section_id": "ENG101-A",
-          "professor": "Prof. Davis",
-          "session_number": 1,
-          "total_sessions": 1,
-          "enrolled_students": 35
-        }
-      ]
-    }
-  };
 }
 
 export default ScheduleManagement;
